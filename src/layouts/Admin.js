@@ -1,5 +1,7 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
+import { useState } from 'react';
+import Login from "views/Login/Login.js";
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
@@ -59,8 +61,14 @@ export default function Admin({ ...rest }) {
       setMobileOpen(false);
     }
   };
+
+  // Try Authentication.
+  const [authToken, setAuthToken] = useState();
+
   // initialize and destroy the PerfectScrollbar plugin
   React.useEffect(() => {
+    if (!authToken) return;
+
     if (navigator.platform.indexOf("Win") > -1) {
       ps = new PerfectScrollbar(mainPanel.current, {
         suppressScrollX: true,
@@ -77,33 +85,39 @@ export default function Admin({ ...rest }) {
       window.removeEventListener("resize", resizeFunction);
     };
   }, [mainPanel]);
-  return (
-    <div className={classes.wrapper}>
-      <Sidebar
-        routes={routes}
-        logo={logo}
-        image={image}
-        handleDrawerToggle={handleDrawerToggle}
-        open={mobileOpen}
-        color={color}
-        {...rest}
-      />
-      <div className={classes.mainPanel} ref={mainPanel}>
-        <Navbar
+
+  if (!authToken) {
+    return <Login setAuthToken={setAuthToken} />;
+  }
+  else {
+    return (
+      <div className={classes.wrapper}>
+        <Sidebar
           routes={routes}
+          logo={logo}
+          image={image}
           handleDrawerToggle={handleDrawerToggle}
+          open={mobileOpen}
+          color={color}
           {...rest}
         />
-        {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
-        {getRoute() ? (
-          <div className={classes.content}>
-            <div className={classes.container}>{switchRoutes}</div>
-          </div>
-        ) : (
-          <div className={classes.map}>{switchRoutes}</div>
-        )}
-        {getRoute() ? <Footer /> : null}
+        <div className={classes.mainPanel} ref={mainPanel}>
+          <Navbar
+            routes={routes}
+            handleDrawerToggle={handleDrawerToggle}
+            {...rest}
+          />
+          {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
+          {getRoute() ? (
+            <div className={classes.content}>
+              <div className={classes.container}>{switchRoutes}</div>
+            </div>
+          ) : (
+              <div className={classes.map}>{switchRoutes}</div>
+            )}
+          {getRoute() ? <Footer /> : null}
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }

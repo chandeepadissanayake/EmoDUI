@@ -34,6 +34,7 @@ const useStyles = makeStyles(styles);
 
 export default function Dashboard() {
   const classes = useStyles();
+
   return (
     <div>
       <GridContainer>
@@ -50,7 +51,7 @@ export default function Dashboard() {
             </CardHeader>
             <CardBody>
               <h4 className={classes.cardTitle}>Daily Entry</h4>
-              <p className={classes.cardCategory}>                
+              <p className={classes.cardCategory}>
               </p>
             </CardBody>
             <CardFooter chart>
@@ -161,7 +162,7 @@ export default function Dashboard() {
                 tableHeaderColor="warning"
                 tableHead={["ID", "Name", "Salary", "Country"]}
                 tableData={[
-                  
+
                 ]}
               />
             </CardBody>
