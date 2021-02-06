@@ -37,7 +37,6 @@ import axios from "axios";
 
 import { EnvironmentConfiguration } from "config/environment.js";
 import { AuthHelper } from 'helpers/auth.js';
-import CustomInput from "components/CustomInput/CustomInput";
 
 const styles = {
     cardCategoryWhite: {

@@ -83,6 +83,20 @@ export default function Login({ setAuthToken, stateUpdater }) {
     }
 
     return (
+        // <div className={classes.loginWrapper}>
+        //     <h1>Please Log In</h1>
+        //     <form onSubmit={handleSubmit}>
+        //         <label>
+        //             <p>Email</p>
+        //             <input type="text" onChange={e => setEmail(e.target.value)} />
+        //         </label>
+        //         <label>
+        //             <p>Password</p>
+        //             <input type="password" onChange={e => setPassword(e.target.value)} />
+        //         </label>
+        //     </form>
+        // </div>
+
         <div className={classes.loginWrapper}>
             <GridContainer>
                 <GridItem>
@@ -101,6 +115,10 @@ export default function Login({ setAuthToken, stateUpdater }) {
                                                 type="text"
                                                 fullWidth
                                                 margin="dense"
+                                                defaultValue={email}
+                                                onChange={(event) => {
+                                                    setEmail(event.target.value);
+                                                }}
                                             />
                                         </div>
                                         <div>
@@ -111,6 +129,10 @@ export default function Login({ setAuthToken, stateUpdater }) {
                                                 autocomplete="current-password"
                                                 fullWidth
                                                 margin="dense"
+                                                defaultValue={password}
+                                                onChange={(event) => {
+                                                    setPassword(event.target.value);
+                                                }}
                                             />
                                         </div>
                                     </GridItem>
@@ -120,6 +142,7 @@ export default function Login({ setAuthToken, stateUpdater }) {
                                 <div>
                                     <Button
                                         color='success'
+                                        onClick={handleSubmit}
                                     >
                                         Sign In
                                     </Button>
