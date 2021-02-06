@@ -19,7 +19,6 @@
 import Dashboard from "@material-ui/icons/Dashboard";
 import Diary from "@material-ui/icons/BookRounded"
 import Person from "@material-ui/icons/Person";
-import Notifications from "@material-ui/icons/Notifications";
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.js";
 import DiaryPage from "views/Diary/Diary.js"

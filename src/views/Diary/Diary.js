@@ -135,7 +135,7 @@ export default function Dashboard() {
         _refreshEntries();
 
         return;
-    }, []);
+    }, [_refreshEntries]);
 
     /* Entry Update Functions */
 
