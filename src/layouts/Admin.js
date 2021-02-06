@@ -66,7 +66,7 @@ export default function Admin({ ...rest }) {
   const [authToken, setAuthToken] = useState();
 
   // initialize and destroy the PerfectScrollbar plugin
-  React.useEffect(() => {
+  React.useEffect((authToken) => {
     if (!authToken) return;
 
     if (navigator.platform.indexOf("Win") > -1) {
