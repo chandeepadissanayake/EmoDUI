@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -9,11 +8,15 @@ import CustomInput from "components/CustomInput/CustomInput.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
-import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
-import avatar from "assets/img/faces/marc.jpg";
+import axios from "axios";
+import { EnvironmentConfiguration } from "config/environment.js";
+import { AuthHelper } from 'helpers/auth.js';
+
+import Snackbar from "components/Snackbar/Snackbar.js";
+import AddAlert from "@material-ui/icons/AddAlert";
 
 const styles = {
   cardCategoryWhite: {
@@ -38,6 +41,78 @@ const useStyles = makeStyles(styles);
 
 export default function UserProfile() {
   const classes = useStyles();
+
+  /* Notifications */
+
+  const [notificationBarOpen, setNotificationBarOpen] = useState(false);
+  const [notificationBarColor, setNotificationBarColor] = useState("primary");
+  const [notificationMessage, setNotificationMessage] = useState("");
+
+  function showNotification(color, message) {
+    setNotificationBarColor(color);
+    setNotificationMessage(message);
+    setNotificationBarOpen(true);
+  }
+
+  /* Profile Details */
+  const [viewUserEmail, setViewUserEmail] = useState("");
+  const [viewUserFirstName, setViewUserFirstName] = useState("");
+  const [viewUserLastName, setViewUserLastName] = useState("");
+
+  function _refreshUser() {
+    axios({
+      url: EnvironmentConfiguration.API_HOST + "/user",
+      method: "GET",
+      headers: {
+        "Authorization": AuthHelper.getAuthorizationHeader(),
+      },
+      mode: "no-cors",
+    }).then(response => {
+      if (response.status === 200) {
+        let userData = response.data;
+
+        setViewUserEmail(userData["email"]);
+        setViewUserFirstName(userData["firstName"]);
+        setViewUserLastName(userData["lastName"]);
+      }
+      else {
+        showNotification("danger", "Failed to fetch user data with error code: " + response.status);
+      }
+    }, error => {
+      showNotification("danger", "Failed to fetch user data with error code: " + error.response.status);
+    });
+  }
+
+  React.useEffect(() => {
+    _refreshUser();
+
+    return;
+  }, []);
+
+  /* Profile Updating Details */
+
+  function _updateProfile() {
+    axios({
+      url: EnvironmentConfiguration.API_HOST + "/user",
+      method: "PUT",
+      headers: {
+        "Authorization": AuthHelper.getAuthorizationHeader(),
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      mode: "no-cors",
+      data: "firstName=" + viewUserFirstName + "&lastName=" + viewUserLastName,
+    }).then(response => {
+      if (response.status === 200) {
+        showNotification("success", "Successfully updated.");
+      }
+      else {
+        showNotification("danger", "Failed to update with status code: " + response.status);
+      }
+    }, error => {
+      showNotification("danger", "Failure to update with error code: " + error.response.status);
+    });
+  }
+
   return (
     <div>
       <GridContainer>
@@ -53,6 +128,10 @@ export default function UserProfile() {
                   <CustomInput
                     labelText="Email address"
                     id="email-address"
+                    inputProps={{
+                      value: viewUserEmail,
+                      disabled: true
+                    }}
                     formControlProps={{
                       fullWidth: true
                     }}
@@ -64,6 +143,12 @@ export default function UserProfile() {
                   <CustomInput
                     labelText="First Name"
                     id="first-name"
+                    inputProps={{
+                      value: viewUserFirstName,
+                      onChange: (event) => {
+                        setViewUserFirstName(event.target.value);
+                      }
+                    }}
                     formControlProps={{
                       fullWidth: true
                     }}
@@ -73,6 +158,12 @@ export default function UserProfile() {
                   <CustomInput
                     labelText="Last Name"
                     id="last-name"
+                    inputProps={{
+                      value: viewUserLastName,
+                      onChange: (event) => {
+                        setViewUserLastName(event.target.value);
+                      }
+                    }}
                     formControlProps={{
                       fullWidth: true
                     }}
@@ -81,11 +172,21 @@ export default function UserProfile() {
               </GridContainer>
             </CardBody>
             <CardFooter>
-              <Button color="primary">Update Profile</Button>
+              <Button color="primary" onClick={() => { _updateProfile(); }}>Update Profile</Button>
             </CardFooter>
           </Card>
         </GridItem>
       </GridContainer>
+
+      <Snackbar
+        place="bc"
+        color={notificationBarColor}
+        icon={AddAlert}
+        message={notificationMessage}
+        open={notificationBarOpen}
+        closeNotification={() => setNotificationBarOpen(false)}
+        close
+      />
     </div>
   );
 }
