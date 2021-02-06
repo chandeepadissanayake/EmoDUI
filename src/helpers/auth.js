@@ -1,28 +1,13 @@
-import React from 'react';
-import { useState } from 'react';
-import Login from "views/Login/Login.js";
+const _SESSION_KEY_AUTH_TOKEN = "auth_token";
 
 export class AuthHelper {
 
-    static tryAuth(successAuthResponse) {
-        const [authToken, setAuthToken] = useState();
-        if (!authToken) {
-            return <Login setAuthToken={setAuthToken} />
-        }
-        else {
-            return successAuthResponse;
-        }
+    static isAuthed() {
+        return sessionStorage.getItem(_SESSION_KEY_AUTH_TOKEN) != null;
     }
 
-    static loginIfNot() {
-        const [authToken, setAuthToken] = useState();
-
-        if (!authToken) {
-            return <Login setAuthToken={setAuthToken} />
-        }
-        else {
-            return null;
-        }
+    static setAuthToken(authToken) {
+        sessionStorage.setItem(_SESSION_KEY_AUTH_TOKEN, authToken);
     }
 
 }

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { EnvironmentConfiguration } from "config/environment.js"
+import { AuthHelper } from 'helpers/auth.js';
 
 const styles = {
     loginWrapper: {
@@ -28,7 +29,7 @@ function loginUser(email, password, onSuccess, onFailure) {
     });
 }
 
-export default function Login({ setAuthToken }) {
+export default function Login({ setAuthToken, stateUpdater }) {
     const classes = useStyles();
 
     const [email, setEmail] = useState();
@@ -37,15 +38,16 @@ export default function Login({ setAuthToken }) {
     const handleSubmit = async e => {
         e.preventDefault();
         loginUser(email, password, (response) => {
-            if (response.status == 200) {
+            if (response.status === 200) {
                 const token = response.data;
                 setAuthToken(token);
+                stateUpdater(AuthHelper.isAuthed());
             }
             else {
                 alert("Unexpected Error. Try again later.");
             }
         }, (errorResponse) => {
-            if (errorResponse.status == 401) {
+            if (errorResponse.status === 401) {
                 alert("Invalid Username/Password.");
             }
             else {
