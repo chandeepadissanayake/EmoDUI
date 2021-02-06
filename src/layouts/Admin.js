@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import { useState } from 'react';
 import Login from "views/Login/Login.js";
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
@@ -18,6 +17,8 @@ import styles from "assets/jss/material-dashboard-react/layouts/adminStyle.js";
 
 import bgImage from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/emodLogo.png";
+
+import { AuthHelper } from "helpers/auth.js";
 
 let ps;
 
@@ -62,12 +63,11 @@ export default function Admin({ ...rest }) {
     }
   };
 
-  // Try Authentication.
-  const [authToken, setAuthToken] = useState();
+  const [stateAuthed, setStateAuthed] = useState(AuthHelper.isAuthed());
 
   // initialize and destroy the PerfectScrollbar plugin
-  React.useEffect(() => {
-    if (!authToken) return;
+  React.useEffect((stateAuthed) => {
+    if (!stateAuthed) return;
 
     if (navigator.platform.indexOf("Win") > -1) {
       ps = new PerfectScrollbar(mainPanel.current, {
@@ -86,8 +86,8 @@ export default function Admin({ ...rest }) {
     };
   }, [mainPanel]);
 
-  if (!authToken) {
-    return <Login setAuthToken={setAuthToken} />;
+  if (!stateAuthed) {
+    return <Login setAuthToken={AuthHelper.setAuthToken} stateUpdater={setStateAuthed} />;
   }
   else {
     return (
