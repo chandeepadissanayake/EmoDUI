@@ -14,4 +14,8 @@ export class AuthHelper {
         sessionStorage.setItem(_SESSION_KEY_AUTH_TOKEN, authToken);
     }
 
+    static getAuthorizationHeader() {
+        return "Bearer " + sessionStorage.getItem(_SESSION_KEY_AUTH_TOKEN);
+    }
+
 }

@@ -19,6 +19,8 @@ import bgImage from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/emodLogo.png";
 
 import { AuthHelper } from "helpers/auth.js";
+import { EnvironmentConfiguration } from "config/environment.js";
+import axios from "axios";
 
 let ps;
 
@@ -65,8 +67,32 @@ export default function Admin({ ...rest }) {
 
   const [stateAuthed, setStateAuthed] = useState(AuthHelper.isAuthed());
 
+  // Check whether the token is really valid by querying the API.
+  React.useEffect(() => {
+    if (!stateAuthed) return;
+
+    axios({
+      url: EnvironmentConfiguration.API_HOST + "/auth",
+      method: "POST",
+      headers: {
+        "Authorization": AuthHelper.getAuthorizationHeader(),
+      },
+      mode: "no-cors",
+    }).then(response => {
+      if (response.status !== 200) {
+        AuthHelper.unAuth();
+        setStateAuthed(false);
+        alert("Your session has been ended. You need to login again!");
+      }
+    }, error => {
+      AuthHelper.unAuth();
+      setStateAuthed(false);
+      alert("Your session has been ended. You need to login again!");
+    });
+  }, [stateAuthed, setStateAuthed]);
+
   // initialize and destroy the PerfectScrollbar plugin
-  React.useEffect((stateAuthed) => {
+  React.useEffect(() => {
     if (!stateAuthed) return;
 
     if (navigator.platform.indexOf("Win") > -1) {
@@ -84,7 +110,7 @@ export default function Admin({ ...rest }) {
       }
       window.removeEventListener("resize", resizeFunction);
     };
-  }, [mainPanel]);
+  }, [mainPanel, stateAuthed]);
 
   if (!stateAuthed) {
     return <Login setAuthToken={AuthHelper.setAuthToken} stateUpdater={setStateAuthed} />;

@@ -24,14 +24,12 @@ import Notifications from "@material-ui/icons/Notifications";
 import DashboardPage from "views/Dashboard/Dashboard.js";
 import DiaryPage from "views/Diary/Diary.js"
 import UserProfile from "views/UserProfile/UserProfile.js";
-import TableList from "views/TableList/TableList.js";
-import NotificationsPage from "views/Notifications/Notifications.js";
 
 const dashboardRoutes = [
   {
     path: "/dashboard",
     name: "Dashboard",
-    rtlName: "لوحة القيادة",
+    rtlName: "Dashboard",
     icon: Dashboard,
     component: DashboardPage,
     layout: "/admin"
@@ -45,26 +43,10 @@ const dashboardRoutes = [
   },
   {
     path: "/user",
-    name: "User Profile",
-    rtlName: "ملف تعريفي للمستخدم",
+    name: "Profile",
+    rtlName: "Profile",
     icon: Person,
     component: UserProfile,
-    layout: "/admin"
-  },
-  {
-    path: "/table",
-    name: "Table List",
-    rtlName: "قائمة الجدول",
-    icon: "content_paste",
-    component: TableList,
-    layout: "/admin"
-  },
-  {
-    path: "/notifications",
-    name: "Notifications",
-    rtlName: "إخطارات",
-    icon: Notifications,
-    component: NotificationsPage,
     layout: "/admin"
   }
 ];

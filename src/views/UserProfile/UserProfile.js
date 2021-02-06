@@ -49,15 +49,6 @@ export default function UserProfile() {
             </CardHeader>
             <CardBody>
               <GridContainer>
-                <GridItem xs={12} sm={12} md={3}>
-                  <CustomInput
-                    labelText="Username"
-                    id="username"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
                 <GridItem xs={12} sm={12} md={4}>
                   <CustomInput
                     labelText="Email address"
@@ -88,46 +79,10 @@ export default function UserProfile() {
                   />
                 </GridItem>
               </GridContainer>
-              <br />
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={12}>
-                  <InputLabel style={{ color: "#AAAAAA" }}>About me</InputLabel>
-                  <CustomInput
-                    labelText="I am an optimistic jolly person. I love sitting by with my family, occasionaly singing songs with them."
-                    id="about-me"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    inputProps={{
-                      multiline: true,
-                      rows: 5
-                    }}
-                  />
-                </GridItem>
-              </GridContainer>
             </CardBody>
             <CardFooter>
               <Button color="primary">Update Profile</Button>
             </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card profile>
-            <CardAvatar profile>
-              <a href="#pablo" onClick={e => e.preventDefault()}>
-                <img src={avatar} alt="..." />
-              </a>
-            </CardAvatar>
-            <CardBody profile>
-              <h6 className={classes.cardCategory}>Your Title</h6>
-              <h4 className={classes.cardTitle}>John Doe</h4>
-              <p className={classes.description}>
-                Your description will be displayed here.
-              </p>
-              <Button color="primary" round>
-                Follow
-              </Button>
-            </CardBody>
           </Card>
         </GridItem>
       </GridContainer>

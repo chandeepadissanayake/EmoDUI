@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { EnvironmentConfiguration } from "config/environment.js"
+import { EnvironmentConfiguration } from "config/environment.js";
 import { AuthHelper } from 'helpers/auth.js';
 
 const styles = {
