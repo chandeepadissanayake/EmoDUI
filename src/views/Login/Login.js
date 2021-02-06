@@ -2,7 +2,6 @@ import React from 'react';
 import { makeStyles } from "@material-ui/core/styles";
 
 import Button from 'components/CustomButtons/Button';
-import CustomInput from 'components/CustomInput/CustomInput';
 import GridContainer from 'components/Grid/GridContainer';
 import GridItem from 'components/Grid/GridItem';
 import Card from 'components/Card/Card';
@@ -46,7 +45,7 @@ export default function Login() {
             <GridContainer>
                 <GridItem>
                     <form>
-                        <Card>
+                        <Card >
                             <CardHeader color="primary">
                                 <h4 className={classes.cardTitleWhite}>Log In</h4>
                             </CardHeader>
@@ -58,6 +57,8 @@ export default function Login() {
                                                 id="email"
                                                 label="Email"
                                                 type="text"
+                                                fullWidth
+                                                margin="dense"
                                             />
                                         </div>
                                         <div>
@@ -66,6 +67,8 @@ export default function Login() {
                                                 label="Password"
                                                 type="password"
                                                 autocomplete="current-password"
+                                                fullWidth
+                                                margin="dense"
                                             />
                                         </div>
                                     </GridItem>
