@@ -47,7 +47,7 @@
   "bugs": {
     "url": "https://github.com/chandeepadissanayake/EmoDUI/issues"
   },
-  "homepage": "https://emodapd.herokuapp.com/dashboard",
+  "homepage": "https://emodapd.herokuapp.com",
   "optionalDependencies": {
     "@types/googlemaps": "3.39.6",
     "@types/markerclustererplus": "2.1.33",
