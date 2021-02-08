@@ -9,7 +9,7 @@ const CONFIGS = {
         [_KEY_CONFIG_API_URL]: "http://localhost:8080/api"
     },
     [KEY_CONFIG_PRODUCTION]: {
-        [_KEY_CONFIG_API_URL]: "prodURL"
+        [_KEY_CONFIG_API_URL]: "https://emod-api.herokuapp.com"
     },
 };
 
