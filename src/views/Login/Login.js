@@ -93,7 +93,7 @@ export default function Login({ setAuthToken, stateUpdater }) {
                             </CardHeader>
                             <CardBody>
                                 <GridContainer>
-                                    <GridItem xs={20} sm={20} md={20}>
+                                    <GridItem xs={12} sm={12} md={12}>
                                         <div>
                                             <TextField
                                                 id="email"
@@ -112,7 +112,6 @@ export default function Login({ setAuthToken, stateUpdater }) {
                                                 id="password"
                                                 label="Password"
                                                 type="password"
-                                                autocomplete="current-password"
                                                 fullWidth
                                                 margin="dense"
                                                 defaultValue={password}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 // react plugin for creating charts
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
@@ -80,7 +80,7 @@ export default function Dashboard() {
 
     const [modalViewEntryOpen, setModalViewEntryOpen] = useState(false);
     const [viewEntryID, setViewEntryID] = useState("");
-    const [viewEntryDate, setViewEntryDate] = useState(new Date());
+    const [viewEntryDate, setViewEntryDate] = useState({ date: new Date() });
     const [viewEntryTitle, setViewEntryTitle] = useState("");
     const [viewEntryEntry, setViewEntryEntry] = useState("");
     const [viewEntryEmotion, setViewEntryEmotion] = useState("");
@@ -89,7 +89,7 @@ export default function Dashboard() {
 
     const [diaryEntries, setDiaryEntries] = useState(new Array(0));
 
-    function _refreshEntries() {
+    const _refreshEntries = useCallback(() => {
         axios({
             url: EnvironmentConfiguration.API_HOST + "/diary/entries",
             method: "GET",
@@ -113,7 +113,7 @@ export default function Dashboard() {
                             setViewEntryDate(kvEntry["date"]);
                             setViewEntryTitle(kvEntry["title"]);
                             setViewEntryEntry(kvEntry["entry"]);
-                            setViewEntryEmotion(kvEntry["emotion"]);
+                            setViewEntryEmotion(kvEntry["emotion"] || "");
 
                             setModalViewEntryOpen(true);
                         }}>
@@ -128,13 +128,37 @@ export default function Dashboard() {
         }, error => {
             showNotification("warning", "Error Fetching Diary Entries with response code: " + error.response.status);
         });
-    }
+    }, []);
 
     React.useEffect(() => {
         _refreshEntries();
 
         return;
     }, [_refreshEntries]);
+
+    /* Single Entry View Functions */
+    function _refreshEntry() {
+        axios({
+            url: EnvironmentConfiguration.API_HOST + "/diary/entries/" + viewEntryID,
+            method: "GET",
+            headers: {
+                "Authorization": AuthHelper.getAuthorizationHeader(),
+            },
+            mode: "no-cors",
+        }).then(response => {
+            if (response.status === 200) {
+                let entry = response.data;
+                setViewEntryID(entry["id"]);
+                setViewEntryDate(entry["date"]);
+                setViewEntryTitle(entry["title"]);
+                setViewEntryEntry(entry["entry"]);
+                setViewEntryEmotion(entry["emotion"] || "");
+            }
+            else {
+                console.log("Failed to Fetch the entry");
+            }
+        });
+    }
 
     /* Entry Update Functions */
 
@@ -156,6 +180,7 @@ export default function Dashboard() {
         }).then(response => {
             if (response.status === 200) {
                 showNotification("success", "Successfully updated.");
+                _refreshEntry();
                 _refreshEntries();
             }
             else {
@@ -170,7 +195,7 @@ export default function Dashboard() {
 
     const [modalNewEntryOpen, setModalNewEntryOpen] = useState(false);
 
-    const [newEntryDate, setNewEntryDate] = useState(new Date());
+    const [newEntryDate, setNewEntryDate] = useState({ newEntryDate: new Date() });
     const [newEntryTitle, setNewEntryTitle] = useState();
     const [newEntryEntry, setNewEntryEntry] = useState();
 
@@ -202,6 +227,7 @@ export default function Dashboard() {
             if (response.status === 200) {
                 setModalNewEntryOpen(false);
                 _resetNewEntry();
+                _refreshEntries();
                 showNotification("success", "Successfully added.");
             }
             else {

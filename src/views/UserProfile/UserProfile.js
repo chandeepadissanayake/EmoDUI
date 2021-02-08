@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // core components
@@ -59,7 +59,7 @@ export default function UserProfile() {
   const [viewUserFirstName, setViewUserFirstName] = useState("");
   const [viewUserLastName, setViewUserLastName] = useState("");
 
-  function _refreshUser() {
+  const _refreshUser = useCallback(() => {
     axios({
       url: EnvironmentConfiguration.API_HOST + "/user",
       method: "GET",
@@ -81,13 +81,13 @@ export default function UserProfile() {
     }, error => {
       showNotification("danger", "Failed to fetch user data with error code: " + error.response.status);
     });
-  }
+  }, []);
 
   React.useEffect(() => {
     _refreshUser();
 
     return;
-  }, []);
+  }, [_refreshUser]);
 
   /* Profile Updating Details */
 
